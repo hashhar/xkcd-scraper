@@ -1,3 +1,4 @@
+import requests
 from requests import get
 from random import randrange
 from json import loads
@@ -10,21 +11,19 @@ class xkcd_scraper:
 	# ================================================================================
 	# Let's initialise
 	def __init__(self, download_dir):
-	"""Check if the download directory exists and permissions exist. If yes, set the download_dir variable"""
 		# If the download dir doesn't exist, we should get out of there (may be a trap)
 		if not os.path.exists(download_dir + os.path.sep):
-			print("Error:", "'" + download_dir + "', no such directory")
+			print("ERROR:", "'" + download_dir + "', no such directory")
 			raise SystemExit
 		# If we don't have access to the download dir, they are probably messing with us. Let's get out.
 		if not os.access(download_dir, os.W_OK):
-			print("Error:", "'" + download_dir + "', permission denied")
+			print("ERROR:", "'" + download_dir + "', permission denied")
 			raise SystemExit
 		# Set the download_dir if everything is good
 		self.download_dir = download_dir
 	
 	# ================================================================================
 	def download_json(self, comic_number):
-	"""Download the JSON encoded information about a comic"""
 		# Can this even happen
 		if comic_number < 0:
 			return None
@@ -35,18 +34,17 @@ class xkcd_scraper:
 			if comic_number == 0:
 				return get("http://xkcd.com/info.0.json").json()
 			else:
-				return get("http://xkcd.com/{0}/info.0.json").format(comic_number)).json()
+				return get(("http://xkcd.com/{0}/info.0.json").format(comic_number)).json()
 		except (requests.exceptions.ConnectionError, ValueError):
 			return None
 	
 	# ================================================================================
 	# Let's download the comic images
-	def download_images(self, comic_number)
-	"""Download the image of a comic"""
+	def download_images(self, comic_number):
 		# The object where we will write the image, will be used later
 		images = []
 		# Let's be careful about the 404 comic (you have to see it though... http://xkcd.com/404
-		if comic_number == 404
+		if comic_number == 404:
 			# Some intrigue for the user
 			print("You should try heading out to http://xkcd.com/404 yourself! It's such a good joke we couldn't manage to download it!")
 			# But we know better than to download it
@@ -111,7 +109,7 @@ def main():
 	# Let's add some command line arguments
 	parser = argparse.ArgumentParser(description='Retrieve xkcd comics.', prefix_chars='-+')
 	# Output directory argument
-	parser.add_argument('-o', '--output-dir', metavar='DIRECTORY', action='store', default='./' help='Change the output directory. Default: current directory')
+	parser.add_argument('-o', '--output-dir', metavar='DIRECTORY', action="store", default='./', help='Change the output directory. Default is current directory')
 	# The comic number argument
 	parser.add_argument('N', type=int, nargs='*', help='An integer or set of integers greater than or equal to zero')
 	# The range argument to help download multiple comics
