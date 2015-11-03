@@ -117,7 +117,7 @@ def main():
 	# The all argument to download all comics
 	parser.add_argument('-a', '--all', action='store_true', help='Fetch all comics')
 	# The random argument
-	parser.add_argument('--random', metavar='ITERATIONS', type=int, help='Fetch random comics', nargs='?', const=1)
+	parser.add_argument('-x' ,'--random', metavar='ITERATIONS', type=int, help='Fetch random comics', nargs='?', const=1)
 	
 	# Parse the arguments
 	args = parser.parse_args()
