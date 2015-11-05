@@ -129,7 +129,7 @@ def main():
 	# Range is pretty stand-alone
 	if args.range:
 		if args.N or args.random or args.all:
-			raise argparse.ArgumentTypeError("You are confusing me... Please avoid using random, all and specifying specific comic numbers with the range option.")
+			raise argparse.ArgumentTypeError("You are confusing me... Please avoid using random, all or specific comic numbers with the range option.")
 		else:
 			# Download all the comics in the specified range
 			for i in range(args.range[0], args.range[1]+1):
