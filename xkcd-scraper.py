@@ -1,4 +1,4 @@
-import requests
+﻿import requests
 from requests import get
 from random import randrange
 from json import loads
@@ -21,7 +21,7 @@ class xkcd_scraper:
 			raise SystemExit
 		# Set the download_dir if everything is good
 		self.download_dir = download_dir
-	
+
 	# ================================================================================
 	def download_json(self, comic_number):
 		# Can this even happen
@@ -37,7 +37,7 @@ class xkcd_scraper:
 				return get(("http://xkcd.com/{0}/info.0.json").format(comic_number)).json()
 		except (requests.exceptions.ConnectionError, ValueError):
 			return None
-	
+
 	# ================================================================================
 	# Let's download the comic images
 	def download_images(self, comic_number):
@@ -49,7 +49,7 @@ class xkcd_scraper:
 			print("You should try heading out to http://xkcd.com/404 yourself! It's such a good joke we couldn't manage to download it!")
 			# But we know better than to download it
 			return
-		
+
 		# 0 is used to refer to the latest comic
 		if comic_number == 0:
 			print("Fetching comic -> Latest".format(comic_number))
@@ -84,13 +84,13 @@ class xkcd_scraper:
 				if block:
 					image_file.write(block)
 					image_file.flush()
-	
+
 	# ================================================================================
 	def download_all(self):
 		# We get the latest comic number from the download_json(0)['num'] and add 1 because range function is not inclusive
 		for i in range(1, self.download_json(0)['num'] + 1):
 			self.download_images(i)
-	
+
 	# ================================================================================
 	def download_random(self, iterations=1):
 		# Let's check if we have a connection by getting the JSON for the latest comic
@@ -102,7 +102,7 @@ class xkcd_scraper:
 			for i in range(iterations):
 				# Pick a random comic between 1 and the latest one
 				self.download_images(randrange(1, info['num'] + 1))
-	
+
 # ================================================================================
 # Our code's execution starts here
 def main():
@@ -118,13 +118,13 @@ def main():
 	parser.add_argument('-a', '--all', action='store_true', help='Fetch all comics')
 	# The random argument
 	parser.add_argument('-x' ,'--random', metavar='ITERATIONS', type=int, help='Fetch random comics', nargs='?', const=1)
-	
+
 	# Parse the arguments
 	args = parser.parse_args()
-	
+
 	# Make an instance of our class
 	x = xkcd_scraper(args.output_dir)
-	
+
 	# Let us try and make sense of the arguments passed
 	# Range is pretty stand-alone
 	if args.range:
@@ -154,7 +154,7 @@ def main():
 		for i in args.N:
 			x.download_images(i)
 		return
-		
+
 # I honestly copied the below snippet and don't know what it EXACTLY does
 if __name__ == '__main__':
 	try:
