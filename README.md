@@ -1,3 +1,5 @@
+[![Stories in Ready](https://badge.waffle.io/hashhar/xkcd-scraper.png?label=ready&title=Ready)](https://waffle.io/hashhar/xkcd-scraper)
+[![Stories in Progress](https://badge.waffle.io/hashhar/xkcd-scraper.png?label=in%20progress&title=In%20Progress)](https://waffle.io/hashhar/xkcd-scraper)
 # XKCD Scraper
 
 Let's download all the XKCD comics and their titles! Why not use a browser plugin? Because you are a geek (or just want to look cool among your friends :satisfied:)!!!
@@ -51,3 +53,6 @@ I am still working on it so feel free to contribute code and file issues and fea
 [Is there anything that is totally random? - StackExchange](http://philosophy.stackexchange.com/questions/2439/is-there-anything-that-is-totally-random)  
 [Randomness vs Unpredictability - Wikipedia](https://en.wikipedia.org/wiki/Randomness#Randomness_versus_unpredictability)  
 [Can we sure that randomeness exists? - Quora](https://www.quora.com/Can-we-be-sure-that-true-randomness-exists-Can-it-be-proven-that-anything-is-truly-random)
+
+# My Throughput
+[![Throughput Graph](https://graphs.waffle.io/hashhar/xkcd-scraper/throughput.svg)](https://waffle.io/hashhar/xkcd-scraper/metrics)
