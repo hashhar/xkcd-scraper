@@ -48,7 +48,7 @@ Fetches `N` pseudo-random (because, well, <a href="#bonus">the world is not fair
 
 I am still working on it so feel free to contribute code and file issues and feature requests.
 
-## <a name="bonus">Food For Thought</a>
+## <h2 id="bonus" name="bonus">Food For Thought</h2>
 
 [Is there anything that is totally random? - StackExchange](http://philosophy.stackexchange.com/questions/2439/is-there-anything-that-is-totally-random)  
 [Randomness vs Unpredictability - Wikipedia](https://en.wikipedia.org/wiki/Randomness#Randomness_versus_unpredictability)  
