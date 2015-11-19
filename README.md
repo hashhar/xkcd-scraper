@@ -46,6 +46,9 @@ Fetches all the comics from the first one to the latest.
 - **`-x`** *`N`*, **`--random`** *`N`*  
 Fetches `N` pseudo-random (because, well, <a href="#food-for-thought">the world is not fair</a>) comics. You can specify how many you want to fetch as -x 10, --random 30. This will fetch 30 random comics.
 
+- **`-t`**, **`--title`**  
+Appends the title of the comic to the filename of the downloaded comic
+
 ## Comments
 
 I am still working on it so feel free to contribute code and file issues and feature requests.

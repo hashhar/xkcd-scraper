@@ -19,6 +19,7 @@ class xkcd_scraper:
 			raise SystemExit
 		# Set the variables if everything is good
 		self.download_dir = download_dir
+		self.append_title = False
 
 	def download_json(self, comic_number):
 		# Can this even happen
@@ -64,7 +65,10 @@ class xkcd_scraper:
 		date = info['day'] + "/" + info['month'] + "/" + info['year']
 		# Let's decide the name we want to give to our downloaded images
 		# Extract the file extension from the image url and append comic title
-		image = num + " - " + title + search("\.([a-z])+$", info['img']).group()
+		if self.append_title == True:
+			image = num + " - " + title + search("\.([a-z])+$", info['img']).group()
+		else:
+			image = num + search("\.([a-z])+$", info['img']).group()
 		# Open the image file for writing
 		with open(self.download_dir + '/' + image, 'wb') as image_file:
 			# TODO: Write code to manipulate the image
@@ -97,20 +101,24 @@ def main():
 	# Let's add some command line arguments
 	parser = argparse.ArgumentParser(description='Retrieve xkcd comics.', prefix_chars='-+')
 	# Output directory argument
-	parser.add_argument('-o', '--output-dir', metavar='DIRECTORY', action="store", default='./', help='Change the output directory. Default is current directory')
+	parser.add_argument('-o', '--output-dir', metavar='DIRECTORY', action='store', default='./', help='Change the output directory. Default is current directory')
 	# The comic number argument
-	parser.add_argument('N', type=int, nargs='*', help='An integer or set of integers greater than or equal to zero')
+	parser.add_argument('N', type=int, nargs='*', help='An integer or set of integers greater than or equal to zero. Use 0 for latest comic.')
 	# The range argument to help download multiple comics
-	parser.add_argument('-r', '--range', action="store", metavar='N', type=int, nargs=2, help='Fetch comics within a certain range')
+	parser.add_argument('-r', '--range', action='store', metavar='N', type=int, nargs=2, help='Fetch comics within a certain range')
 	# The all argument to download all comics
 	parser.add_argument('-a', '--all', action='store_true', help='Fetch all comics')
 	# The random argument
 	parser.add_argument('-x' ,'--random', metavar='ITERATIONS', type=int, help='Fetch random comics', nargs='?', const=1)
+	# The append comic title argument
+	parser.add_argument('-t', '--title', action='store_true', help='Appends the comic title to the filename')
 
 	args = parser.parse_args()
 	x = xkcd_scraper(args.output_dir)
 
 	# Let us try and make sense of the arguments passed
+	if args.title:
+		x.append_title = True
 	# Range is pretty stand-alone
 	if args.range:
 		if args.N or args.random or args.all:
