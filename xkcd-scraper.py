@@ -1,8 +1,9 @@
-﻿import requests
-from requests import get
+﻿from requests import get
 from random import randrange
 from json import loads
 from re import search
+from PIL import Image, ImageDraw, ImageFont
+from textwrap import wrap
 import argparse
 import os
 
@@ -20,6 +21,11 @@ class xkcd_scraper:
 		# Set the variables if everything is good
 		self.download_dir = download_dir
 		self.append_title = False
+		self.embed = False
+		# Settings that control the embedded text appearance
+		self.title_fontsize = 28
+		self.alt_fontsize = 18
+		self.line_offset = 10
 
 	def download_json(self, comic_number):
 		# Can this even happen
@@ -36,6 +42,87 @@ class xkcd_scraper:
 				return get(("http://xkcd.com/{0}/info.0.json").format(comic_number)).json()
 		except (requests.exceptions.ConnectionError, ValueError):
 			return None
+
+	def add_text(self, image, title, alt, tfont = 'xkcd.ttf', afont = 'xkcd.ttf'):
+		try:
+			img = Image.open(image)
+		except OSError:
+			return
+
+		tfont = ImageFont.truetype("xkcd.ttf", self.title_fontsize)
+		afont = ImageFont.truetype("xkcd.ttf", self.alt_fontsize)
+		# Compute the widths and heights for the title and alt
+		twidth, theight = tfont.getsize(title)
+		awidth, aheight = afont.getsize(alt)
+		line_padding = 5
+		# Get the object to draw upon
+		draw = ImageDraw.Draw(img)
+		lines = self.text_wrap(tfont, title, img.size[0])
+		lheight = max([tfont.getsize(" ".join(i))[1] for i in lines])
+		lheight_total = (lheight + line_padding) * (len(lines)) + line_padding * 4
+		title_crop = (0, -1 * lheight_total, img.size[0], img.size[1])
+		img = img.crop(title_crop)
+		w, h = img.size
+		old_h = h
+		draw = ImageDraw.Draw(img)
+		lheight_total = line_padding
+		for i in lines:
+			draw.text((w / 2 - tfont.getsize(" ".join(i))[0] / 2,
+					  lheight_total),
+					  " ".join(i),
+					  font=tfont,
+					  fill=0xffffff)
+			lheight_total += lheight + line_padding
+		lheight_total = line_padding
+		lines = self.text_wrap(afont, alt, w)
+		lheight = max([afont.getsize(" ".join(i))[1] for i in lines])
+		lheight_total = lheight * len(lines)
+		alt_crop = (0, 0, img.size[0],
+					img.size[1] + lheight_total + (len(lines) + 3) * line_padding)
+		img = img.crop(alt_crop)
+		draw = ImageDraw.Draw(img)
+		lheight_total = old_h + line_padding
+		for i in lines:
+			if not i:
+				continue
+			draw.text((w / 2 - afont.getsize(" ".join(i))[0] / 2,  lheight_total), " ".join(i), font=afont, fill=0xffffff)
+			lheight_total += lheight + line_padding
+		# Save all of the stuff we did
+		img.save(image)
+
+	def text_wrap(self, font, text, image_width, i = 0):
+		lines = [[]]
+		text = text.split(" ")
+		while len(text) > 0:
+			while len(text) > 0 \
+					and font.getsize(" ".join(lines[i]))[0] < image_width:
+				if font.getsize(text[0] + " " + " ".join(lines[i]))[0] \
+						> image_width * 0.95:
+					if len(lines[i]) == 0:
+						text[0] = text[0][:len(text[0]) // 2 + 1] \
+							+ " " + text[0][:len(text[0]) // 2 + 1:]
+						text = text[0].split(" ") + text[1:]
+					break
+				lines[i].append(text[0])
+				text.pop(0)
+			i += 1
+			lines.append([])
+		sub = []
+		for e, i in enumerate(lines):
+			if font.getsize(" ".join(lines[e]))[0] > image_width:
+				temp_str = ""
+				for c in "".join(i):
+					if font.getsize(temp_str + c)[0] > image_width:
+						lines[i] = lines[i][:len(lines[i]) // 2] \
+							+ lines[i][len(lines[i]) // 2:]
+						break
+					temp_str += c
+				sub.append(temp_str)
+				del lines[e]
+		lines = [i for i in lines if len(i) != 0]
+		for c in [i for i in sub if len(i) != 0]:
+			lines.append(c)
+		return lines
 
 	def download_images(self, comic_number):
 		# The object where we will write the image, will be used later
@@ -71,13 +158,15 @@ class xkcd_scraper:
 			image = num + search("\.([a-z])+$", info['img']).group()
 		# Open the image file for writing
 		with open(self.download_dir + '/' + image, 'wb') as image_file:
-			# TODO: Write code to manipulate the image
 			# Get the image from the website
 			srcimg = get(info['img'], stream = True)
 			for block in srcimg.iter_content(1024):
 				if block:
 					image_file.write(block)
 					image_file.flush()
+			if embed and not search("\.gif", info['img']):
+				print("Processing comic -> {0}".format(comic_number))
+				self.add_text(self.download_dir+'/'+image, title, alt)
 
 	def download_all(self):
 		# We get the latest comic number from the download_json(0)['num'] and add 1
@@ -112,6 +201,8 @@ def main():
 	parser.add_argument('-x' ,'--random', metavar='ITERATIONS', type=int, help='Fetch random comics', nargs='?', const=1)
 	# The append comic title argument
 	parser.add_argument('-t', '--title', action='store_true', help='Appends the comic title to the filename')
+	# The embed comic title and alt text in the image argument
+	parser.add_argument('-e', '--embed', action='store_true', help='Embeds the comic title and alt text to the comic image (unless its a gif)')
 
 	args = parser.parse_args()
 	x = xkcd_scraper(args.output_dir)
@@ -119,6 +210,8 @@ def main():
 	# Let us try and make sense of the arguments passed
 	if args.title:
 		x.append_title = True
+	if args.embed:
+		x.embed = True
 	# Range is pretty stand-alone
 	if args.range:
 		if args.N or args.random or args.all:
