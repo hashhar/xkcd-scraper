@@ -164,7 +164,7 @@ class xkcd_scraper:
 				if block:
 					image_file.write(block)
 					image_file.flush()
-			if embed and not search("\.gif", info['img']):
+			if self.embed and not search("\.gif", info['img']):
 				print("Processing comic -> {0}".format(comic_number))
 				self.add_text(self.download_dir+'/'+image, title, alt)
 
