@@ -2,26 +2,35 @@
 [![Stories in Ready](https://badge.waffle.io/hashhar/xkcd-scraper.png?label=ready&title=Ready)](https://waffle.io/hashhar/xkcd-scraper)
 [![Stories in Progress](https://badge.waffle.io/hashhar/xkcd-scraper.png?label=in%20progress&title=In%20Progress)](https://waffle.io/hashhar/xkcd-scraper)
 [![Stories in Under Review](https://badge.waffle.io/hashhar/xkcd-scraper.png?label=under%20review&title=Under%20Review)](https://waffle.io/hashhar/xkcd-scraper)
+
 # XKCD Scraper
 
 Let's download all the XKCD comics and their titles! Why not use a browser plugin? Because you are a geek (or just want to look cool among your friends :satisfied:)!!!
 
-## Dependencies
-
-**Requests Python Module**  
-Get it by doing
-```python
-pip install requests
-```
-
 ## Setup Instructions
 
 Why are you even reading this (unless you are somebody new to Python)???  
-Make sure you have all the dependencies resolved before proceeding.
 
-```github
+```bash
+# Clone the repository
 git clone https://github.com/hashhar/xkcd-scraper.git
-python xkcd-scraper.py --your-arguments
+# Install dependencies
+pip3 install -r requirements.txt
+# Run the program
+python3 xkcd-scraper.py --your-arguments
+```
+
+You can also install this within a Python virtual environment like so:
+
+```bash
+# Create a virtual env
+python3 -m venv venv
+# Activate the virtual env
+source venv/bin/activate
+# Install dependencies within the virtual env
+pip3 install -r requirements.txt
+# Run the program
+python3 xkcd-scraper.py --your-arguments
 ```
 
 ## Command Line Options
