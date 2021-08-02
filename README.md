@@ -2,6 +2,10 @@
 
 Let's download all the XKCD comics and their titles! Why not use a browser plugin? Because you are a geek (or just want to look cool among your friends :satisfied:)!!!
 
+# NOTICE
+
+**I'm not using this project anymore so some things might be broken from time to time but please file an issue and we can work together to make it work again and resolve the issues.**
+
 ## Setup Instructions
 
 Why are you even reading this (unless you are somebody new to Python)???  
