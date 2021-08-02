@@ -1,8 +1,3 @@
-[![Stories in Help Wanted](https://badge.waffle.io/hashhar/xkcd-scraper.png?label=help%20wanted&title=Help%20Wanted/Backlog)](https://waffle.io/hashhar/xkcd-scraper)
-[![Stories in Ready](https://badge.waffle.io/hashhar/xkcd-scraper.png?label=ready&title=Ready)](https://waffle.io/hashhar/xkcd-scraper)
-[![Stories in Progress](https://badge.waffle.io/hashhar/xkcd-scraper.png?label=in%20progress&title=In%20Progress)](https://waffle.io/hashhar/xkcd-scraper)
-[![Stories in Under Review](https://badge.waffle.io/hashhar/xkcd-scraper.png?label=under%20review&title=Under%20Review)](https://waffle.io/hashhar/xkcd-scraper)
-
 # XKCD Scraper
 
 Let's download all the XKCD comics and their titles! Why not use a browser plugin? Because you are a geek (or just want to look cool among your friends :satisfied:)!!!
